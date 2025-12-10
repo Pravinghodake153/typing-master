@@ -7,9 +7,12 @@
 
     <style>
        body{
-        background: #12ee078b;
+        background-image: url(https://img3.wallspic.com/crops/7/3/3/9/7/179337/179337-8k_nature-nature-tablet-water-water_resources-7680x4320.jpg);
         margin: 0;
-        padding: 0;
+        background-size: cover;        /* image covers full screen */
+        background-repeat: no-repeat;  /* no repeat */
+        background-position: center;
+        padding-bottom: 10vh;
        }
         .box {
     display: flex;
@@ -20,7 +23,7 @@
 }
 
        .words{
-        border: 8px solid blue;
+        border: 8px solid rgba(0, 208, 255, 0.357);
         display: flex;
         flex-wrap: wrap;   /*all words stay inside */
         justify-content: center;
@@ -28,18 +31,21 @@
         font-size: 40px;
         align-items: center;
         margin-top: 30px;
+        backdrop-filter: blur(12px);
+        color: #fbfbfa9c;
         height: 60vh;
         width: 50vw;
         border-radius: 1em;
-        background-color: rgba(212, 255, 0, 0.631);
+        
        }
 
        .timer{
         display: flex;
         margin-top: 30px;
         height: 1.2em;
+        backdrop-filter: blur(12px);
+        background-color: rgba(250, 235, 215, 0.217);
         width: 2.7em;
-        background-color: rgb(251, 251, 2);
         justify-content: center;
         border-radius: 1.5em;
         font-size: 100px;
@@ -48,9 +54,11 @@
        }
 
        .Name{
-        background-color: rgb(2, 201, 251);
+        background-color: rgba(6, 6, 6, 0.39);
+        color: rgba(3, 247, 166, 0.994);
         display: flex;
         height: 1.2em;
+        backdrop-filter: blur(12px);
         width: 8em;
         justify-content: center;
         border-radius: 1.3em;
@@ -132,7 +140,7 @@ function putSentance(){
     }
 }
 
-for(let i=0;i<30;i++){
+for(let i=0;i<35;i++){
     putSentance();
 }
 
@@ -213,8 +221,6 @@ function showPopup(){
 
     document.getElementById("restartBtn").onclick = ()=>location.reload();
 }
-
 </script>
-
 </body>
 </html>
