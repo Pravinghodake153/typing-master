@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+       body{
+        background: #12ee078b;
+        margin: 0;
+        padding: 0;
+       }
+        .box {
+    display: flex;
+    flex-direction: column;     /* arrange Name, Timer, Words vertically */
+    justify-content: center;    /* center vertically */
+    align-items: center;        /* center horizontally */
+    height: 90vh;              /* full screen height */
+}
+
+       .words{
+        border: 8px solid blue;
+        display: flex;
+        flex-wrap: wrap;   /*all words stay inside */
+        justify-content: center;
+        gap: 15px;
+        font-size: 40px;
+        align-items: center;
+        margin-top: 30px;
+        height: 60vh;
+        width: 50vw;
+        border-radius: 1em;
+        background-color: rgba(212, 255, 0, 0.631);
+       }
+
+       .timer{
+        display: flex;
+        margin-top: 30px;
+        height: 1.2em;
+        width: 2.7em;
+        background-color: rgb(251, 251, 2);
+        justify-content: center;
+        border-radius: 1.5em;
+        font-size: 100px;
+        align-items: center;
+        color: rgba(249, 85, 3, 0.839);
+       }
+
+       .Name{
+        background-color: rgb(2, 201, 251);
+        display: flex;
+        height: 1.2em;
+        width: 8em;
+        justify-content: center;
+        border-radius: 1.3em;
+        align-items: center;
+        margin-top: 1.5em;
+        font-size: 40px;  
+        font-weight: bold;
+       }
+
+       /* ⭐ NEW FIXED POPUP */
+       .screen{
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 300px;
+            width: 350px;
+            backdrop-filter: blur(10px);
+            border: 4px solid black;
+            border-radius: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 30px;
+            z-index: 9999;
+       }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <div class="Name">Type-Master</div>
+        <div class="timer">00</div>
+        <div class="words"></div>
+    </div>
+
+    <div class="screen">
+        <h2>Your accuracy is</h2>
+    </div>
+
+<script>
+
+let arr=[
+ "function","variable","constant","callback","promise","async","await",
+ "react","redux","component","context","eventloop","algorithm","database",
+ "frontend","backend","compiler","debugger","runtime","network"
+];
+
+let currentLetter='';
+let currentWord='';
+
+let sec=31;
+let timer=document.querySelector('.timer');
+let word=document.querySelector(".words");
+let body=document.querySelector("body");
+let screen=document.querySelector(".screen");
+
+let correct=0;
+let wrongWords = 0;
+let hasWrongLetter = false;
+
+function getRandomWord(){
+    return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function genrateWord(){
+    let w = getRandomWord();
+    return w.split("").map(letter=>`<span>${letter}</span>`).join("");
+}
+
+function putSentance(){
+    let spans = genrateWord();
+    word.insertAdjacentHTML("beforeend", `<span>${spans}</span> `);
+
+    if(currentWord === ""){
+        currentWord = word.children[0];
+        currentLetter = currentWord.firstElementChild;
+    }
+}
+
+for(let i=0;i<30;i++){
+    putSentance();
+}
+
+body.addEventListener("keydown", (e)=>{
+
+    if(sec === 31) start();
+
+    if(!currentLetter) return;
+
+    if(e.key === currentLetter.innerText){
+        currentLetter.style.color = "green";
+        correct++;
+    }
+    else{
+        currentLetter.style.color = "red";
+        hasWrongLetter = true;
+    }
+
+    currentLetter = currentLetter.nextElementSibling;
+
+    if(currentLetter === null){
+        nextWord();
+    }
+});
+
+function nextWord(){
+
+    if(hasWrongLetter){
+        wrongWords++;
+    }
+
+    hasWrongLetter = false;
+
+    currentWord = currentWord.nextElementSibling;
+
+    if(currentWord){
+        currentLetter = currentWord.firstElementChild;
+    }
+}
+
+function start(){
+    sec--;
+    let id = setInterval(()=>{
+
+        timer.innerText = sec;
+
+        if(sec === 0){
+            clearInterval(id);
+            showPopup();
+        }
+        sec--;
+
+    },1000);
+}
+
+/*POPUP FUNCTION */
+function showPopup(){
+
+    screen.style.display = "flex";
+
+    screen.innerHTML = `
+        <h2>Your speed is ${correct/5}</h2>
+        <h3>Wrong Words: ${wrongWords}</h3>
+        <button id="restartBtn" style="
+             padding:10px 20px 10px;
+            font-size:25px;
+            border:none;
+            background:blue;
+            color:white;
+            border-radius:10px;
+            cursor:pointer;
+            margin-top:20px;
+            margin-bottom: 38px;
+        ">
+            Start Again
+        </button>
+    `;
+
+    document.getElementById("restartBtn").onclick = ()=>location.reload();
+}
+
+</script>
+
+</body>
+</html>
